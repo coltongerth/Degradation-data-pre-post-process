@@ -11,9 +11,7 @@ from shapely.geometry import box
 from scipy import stats as st
 from datetime import datetime
 from rasterio.mask import mask
-from dask.delayed import delayed
 # from dotenv import load_doten
-from IPython.display import display
 from rasterio.windows import Window
 from rasterio.profiles import DefaultGTiffProfile
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED, ALL_COMPLETED
@@ -25,7 +23,8 @@ def main():
 
     # INPUTS HERE
     zone_name = "BpsMskR2Fin"
-    boundary_name = "BpsMskR2Fin"
+    # boundary_name = "BpsMskR2Fin"
+    boundary_name = "smallcut"
 
     # DONT WORRY ABOUT THESE
     zone_raster_path = f"{zone_name}.tif"
@@ -205,7 +204,7 @@ def main():
         write_multiband_raster_to_single_csv(stack_path, f'{boundary_name}_rpms_stack_cut.csv')
 
         zones_df = pd.read_csv(f'{zone_name}_{boundary_name}_cut.csv')
-        zones_df = zones_df[zones_df['value'] != -32768]
+        zones_df = zones_df[zones_df['Zone'] != -32768]
         zones_df.rename(columns={'x': 'X', 'y': 'Y'}, inplace=True)
         zones_df.to_csv(f'{zone_name}_{boundary_name}_cut.csv', index=False)
 
@@ -213,7 +212,8 @@ def main():
 
         def replace_zeros_with_row_mean(df):
             # Extract only the 'band' columns for processing
-            band_columns = [col for col in df.columns if col.startswith('band')]
+            
+            band_columns = [col for col in df.columns if 'band' in col]
 
             # Iterate over each row
             for index, row in df.iterrows():
