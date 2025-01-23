@@ -29,9 +29,9 @@ def main():
 
     # DONT WORRY ABOUT THESE
     zone_raster_path = f"{zone_name}.tif"
-    post_cut_zone_raster_path = f"./data/{zone_name}/{zone_name}_{boundary_name}_cut.tif"
+    post_cut_zone_raster_path = f"{zone_name}/{zone_name}_{boundary_name}_cut.tif"
     boundary_raster_path = f"{boundary_name}.tif"
-    data_raster_path = f"./data/{zone_name}/{boundary_name}_rpms_stack.tif"
+    data_raster_path = f"{zone_name}/{boundary_name}_rpms_stack.tif"
     dummy_path = "./test.tif"
     data_type = "float32"
 
@@ -151,7 +151,7 @@ def main():
 
         )
 
-        od = f"./data/{zone_name}"
+        od = f"{zone_name}"
         if not os.path.exists(od):
             os.makedirs(od)
 
