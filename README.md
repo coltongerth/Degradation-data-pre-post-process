@@ -10,10 +10,15 @@ python3 -m pip install -r requirements.txt
 Step 2: Ensure that the zones raster is in the same local directory it should look as follows in your file explorer
 
 /forRScript
+
 bpsgt100ku.tif
+
 raster_to_csv.py
+
 README.md
+
 requirements.txt
+
 result_csv_to_raster.py
 
 Step 3: Run the python script to form an RPMS raster stack within the bounds of our zones raster:
