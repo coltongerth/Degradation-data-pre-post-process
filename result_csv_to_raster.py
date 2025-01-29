@@ -3,7 +3,6 @@ import rasterio
 import numpy as np
 import pandas as pd
 from rasterio.transform import from_origin
-from google.colab import drive
 
 def main():
     

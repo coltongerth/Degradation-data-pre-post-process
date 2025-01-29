@@ -16,15 +16,23 @@ from rasterio.windows import Window
 from rasterio.profiles import DefaultGTiffProfile
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED, ALL_COMPLETED
 
+
 def main():
+    # Check if directory exists
+    if not os.path.exists('forRScript'):
+        # Create directory if it doesn't exist
+        os.makedirs('forRScript')
+        print("Directory 'forRScript' created")
+    else:
+        print("Directory 'forRScript' already exists")
         
     # IF YOU HAVE MEMORY CRASHING ISSUES LOWER THIS NUMBER (KEEP IN POWERS OF 2: 2, 4, 8, 16, 32 ...)
     BLOCKSIZE = 256
 
     # INPUTS HERE
-    zone_name = "BpsMskR2Fin"
+    zone_name = "bpsgt100ku"
     # boundary_name = "BpsMskR2Fin"
-    boundary_name = "smallcut"
+    boundary_name = "bpsgt100ku"
 
     # DONT WORRY ABOUT THESE
     zone_raster_path = f"{zone_name}.tif"
@@ -178,7 +186,7 @@ def main():
                     dst.write(dat)
 
 
-        raster_to_csv(post_cut_zone_raster_path, f'{zone_name}_{boundary_name}_cut.csv')
+        raster_to_csv(post_cut_zone_raster_path, f'./forRScript/{boundary_name}_cut.csv')
 
 
         files = [f"https://storage.googleapis.com/fuelcast-public/rpms/{y}/rpms_{y}.tif" for y in range(1984, 2024) if y != 2012]
@@ -203,10 +211,10 @@ def main():
 
         write_multiband_raster_to_single_csv(stack_path, f'{boundary_name}_rpms_stack_cut.csv')
 
-        zones_df = pd.read_csv(f'{zone_name}_{boundary_name}_cut.csv')
+        zones_df = pd.read_csv(f'./forRScript/{boundary_name}_cut.csv')
         zones_df = zones_df[zones_df['Zone'] != -32768]
         zones_df.rename(columns={'x': 'X', 'y': 'Y'}, inplace=True)
-        zones_df.to_csv(f'{zone_name}_{boundary_name}_cut.csv', index=False)
+        zones_df.to_csv(f'./forRScript/{boundary_name}_cut.csv', index=False)
 
         new_cut_rpms_filtered = pd.read_csv(f'{boundary_name}_rpms_stack_cut.csv')
 
@@ -227,7 +235,7 @@ def main():
 
         new_cut_rpms_filtered_mean_filled = replace_zeros_with_row_mean(new_cut_rpms_filtered)
 
-        new_cut_rpms_filtered_mean_filled.to_csv(f'{boundary_name}_rpms_stack_cut_filtered_mean_filled.csv', index=False)
+        new_cut_rpms_filtered_mean_filled.to_csv(f'./forRScript/{boundary_name}_rpms_stack_cut_filtered_mean_filled.csv', index=False)
 
 
 
